@@ -2,11 +2,14 @@ import { usePath, useRoutes } from 'raviger'
 import { useEffect, useState } from 'react'
 import LayoutTheme from './LayoutTheme'
 import Home from '@/pages/Home'
+import Playlist from '@/pages/Playlist'
 import { Button } from '@radix-ui/themes'
+
 
 const routes = {
   '/': () => <Home />,
   '/count': () => <Counter param1='azrlkazjrzaj' />,
+  '/playlist': () => <Playlist />,
 }
 
 function Counter({ param1 }) {

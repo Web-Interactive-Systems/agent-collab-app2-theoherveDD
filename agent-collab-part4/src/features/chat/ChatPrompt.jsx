@@ -51,13 +51,18 @@ function ChatPrompt() {
     const prompt = promptRef.current.value
     console.log('onSendPrompt', prompt)
 
-    const contextInputs = constructCtxArray(messages)
+  
 
     addMessage({
       role: 'user',
       content: prompt,
       id: Math.random().toString(),
     })
+    
+    const messages = $messages.get()
+
+    const contextInputs = constructCtxArray(messages);
+
 
     // AI response
     const response = {
@@ -68,14 +73,27 @@ function ChatPrompt() {
     }
 
     // add AI response to chat messages
-    addMessage(response)
+
+
+    // const stream = await onAgent({ prompt: prompt, contextInputs });
+    // console.log('stream', stream)
+
+    // for await (const part of stream) {
+    //   const token = part.choices[0]?.delta?.content || ''
+    //   console.log('token', token)
+    //   console.log('stream part', part)
+
+    //   response.content += token
+
+    //   updateMessages([...messages, response]);
+    // }
 
     const steps = isEmpty(chatAgents) ? [null] : chatAgents
 
     for (let i = 0, len = steps.length; i < len; i++) {
-      const agent = steps[i]
+        const agent = steps[i]
 
-      let cloned = $messages.get()
+         let cloned = $messages.get()
 
       // call agent
       const stream = await onAgent({ prompt: prompt, agent, contextInputs })
@@ -116,7 +134,13 @@ function ChatPrompt() {
 
     promptRef.current.value = ''
     setIsPromptEmpty(true)
+
+
+
+
   }
+
+  
 
   return (
     <Flex
@@ -150,6 +174,8 @@ function ChatPrompt() {
             align='center'
             width='100%'>
             {/* TODO Add Agent Select Menu */}
+            <AgentSelect />
+            <AgentMenu />
           </Flex>
         </Flex>
         <Flex
