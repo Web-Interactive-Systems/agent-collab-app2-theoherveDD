@@ -1,7 +1,7 @@
 import { Resizable } from '@/components/Resizable'
-import Agent from '@/features/agent/Agent'
 import Chat from '@/features/chat/Chat'
 import { Flex } from '@radix-ui/themes'
+import PlaylistList from '@/features/playlist/PlaylistList'
 
 function Home() {
   return (
@@ -9,7 +9,7 @@ function Home() {
       gap='8'
       width='100%'
       height='100%'>
-      <Agent />
+        <PlaylistList />
 
       <Resizable
         defaultSize={{ width: 550 }}

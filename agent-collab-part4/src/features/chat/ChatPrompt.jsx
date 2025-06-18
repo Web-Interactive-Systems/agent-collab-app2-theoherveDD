@@ -1,6 +1,6 @@
 import { onAgent } from '@/actions/agent'
 import { styled } from '@/lib/stitches'
-import { $chatAgents, $messages, addMessage, updateMessages } from '@/store/store'
+import {$chatAgents, $messages, $playlists, addMessage, addTrackInPlaylist, updateMessages} from '@/store/store'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { Button, Flex, TextArea } from '@radix-ui/themes'
 import { useRef, useState } from 'react'
@@ -8,6 +8,9 @@ import { AgentMenu } from './AgentMenu'
 import { AgentSelect } from './AgentSelect'
 import { useStore } from '@nanostores/react'
 import { isEmpty } from 'lodash'
+import { extractJSONString } from '@/lib/json.js'
+
+import Playlist from "@/pages/Playlist.jsx";
 
 const PromptContainer = styled(Flex, {
   width: '100%',
@@ -41,6 +44,7 @@ function ChatPrompt() {
 
   const chatAgents = useStore($chatAgents)
   const messages = useStore($messages)
+  const playlist = useStore($playlists)
 
   const onTextChange = () => {
     const val = promptRef.current.value || ''
@@ -72,22 +76,6 @@ function ChatPrompt() {
       completed: false, // not complete yet
     }
 
-    // add AI response to chat messages
-
-
-    // const stream = await onAgent({ prompt: prompt, contextInputs });
-    // console.log('stream', stream)
-
-    // for await (const part of stream) {
-    //   const token = part.choices[0]?.delta?.content || ''
-    //   console.log('token', token)
-    //   console.log('stream part', part)
-
-    //   response.content += token
-
-    //   updateMessages([...messages, response]);
-    // }
-
     const steps = isEmpty(chatAgents) ? [null] : chatAgents
 
     for (let i = 0, len = steps.length; i < len; i++) {
@@ -116,6 +104,23 @@ function ChatPrompt() {
         completed: true,
       }
 
+
+
+      const BigJson = extractJSONString(last.content);
+
+      console.log('last', last.content)
+
+      console.log("typeof last.content:", typeof last.content);
+      console.log("last.content:", last.content);
+
+      console.log('BIG JSON', BigJson)
+
+      addTrackInPlaylist(BigJson);
+
+
+
+
+
       // add next prompt to chat
       if (steps.length > 0 && i !== steps.length - 1) {
         cloned = [
@@ -134,9 +139,6 @@ function ChatPrompt() {
 
     promptRef.current.value = ''
     setIsPromptEmpty(true)
-
-
-
 
   }
 

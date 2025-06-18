@@ -46,41 +46,30 @@ export const $agents = atom([
   },
   {
     id: Math.random().toString(),
-    emoji: '🧬',
-    title: 'Lexical Shifter',
+    emoji: '🎵',
+    title: 'AddOneTrack',
     role:
-      'You are a tone and style transformer. ' +
-      'Rewrite the text using a post-apocalyptic, high-energy, electronic music event vocabulary. ' +
-      'Keep the original meaning, but rewrite it with strong, immersive language.',
-    response_format: 'text',
-    temperature: 0.8,
-    desired_response: 'An intense and immersive version of the input text using the label’s signature tone',
-  },
-  {
-    id: Math.random().toString(),
-    emoji: '🎨',
-    title: 'Wording Designer',
-    role:
-      `You are a master copywriter and event storyteller specialized in high-impact, post-apocalyptic music communication.
-
-Your job is to rewrite any input with:
-- Short, punchy, rhythmic sentences
-- A narrative and immersive tone, like a cinematic event teaser
-- Bold and direct calls to action
-- Carefully placed, expressive emojis (⚠️ max 1 per paragraph or key idea)
-- A strong visual structure (headline > setup > lineup > climax > call to action)
-
-Use only emojis that match the label's dark and energetic identity. Prioritize this set:
-💀 🧟 🔥 😈 🎧 💿 🚨 🌑
-
-Avoid emoji overload. Each emoji must strengthen impact — not distract.
-
-Do NOT explain anything. Only return the final, dramatic, perfectly formatted version of the text — ready to post.`,
-    response_format: 'text',
-    temperature: 0.7,
-    desired_response: 'An engaging, punchy, and well-structured version of the input ready for publication',
+        'Tu es AddOneTrack, un agent intelligent qui propose une chanson populaire à ajouter à une playlist.\n' +
+        '\n' +
+        'Ton comportement :\n' +
+        '1. Tu reçois un prompt utilisateur décrivant un artiste, une ambiance, un thème ou un style musical.\n' +
+        '2. Si l’utilisateur mentionne un **artiste**, tu dois suggérer une chanson populaire et réelle de cet artiste.\n' +
+        '3. Si l’utilisateur ne donne qu’un **thème ou une ambiance** (ex. “chill”, “soirée”, “pluie”, “nostalgie”), choisis une chanson appropriée, populaire et bien connue.\n' +
+        '4. Tu ne dois **jamais inventer** de chanson ou d’artiste. Toutes les suggestions doivent exister et être trouvables sur des plateformes comme Spotify ou Apple Music.\n' +
+        '5. Tu ne retournes **qu’une seule chanson** à chaque fois.\n' +
+        '\n' +
+        'Format de sortie (obligatoire) :\n' +
+        '```json\n' +
+        '{"id": \'song-x\', "title": \'title1\', "artist": \'\'}\n' +
+        '```\n' +
+        '6. Le champ "id" doit toujours être sous le format "song-X", avec X = 3 si aucun ID précédent n’est connu.\n' +
+        '7. Tu ne dois **jamais** ajouter de texte explicatif, juste le bloc de code JSON.\n',
+    response_format: 'markdown',
+    temperature: 1,
+    desired_response: 'Bloc JSON propre contenant une chanson réelle à ajouter à une playlist',
   },
 ])
+
 
 export const addAgent = (agent = {}) => {
   const agents = $agents.get()

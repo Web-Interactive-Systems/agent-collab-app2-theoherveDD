@@ -5,8 +5,8 @@ import './index.css'
 export default function Theme({ children }) {
   return (
     <RadixTheme
-      appearance='light'
-      accentColor='indigo'
+      appearance='dark'
+      accentColor='green'
       scaling='100%'
       radius='full'>
       {children}
