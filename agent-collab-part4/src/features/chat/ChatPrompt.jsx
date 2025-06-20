@@ -9,6 +9,7 @@ import { AgentSelect } from './AgentSelect'
 import { useStore } from '@nanostores/react'
 import { isEmpty } from 'lodash'
 import { extractJSONString } from '@/lib/json.js'
+import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
 import Playlist from "@/pages/Playlist.jsx";
 
@@ -29,6 +30,17 @@ const PromptArea = styled(TextArea, {
     fontWeight: 450,
   },
 })
+
+const sdk = SpotifyApi.withUserAuthorization(
+    import.meta.env.VITE_SPOTIFY_CLIENT_ID,
+    import.meta.env.VITE_SPOTIFY_REDIRECT_URI,
+    ['user-read-private', 'playlist-read'],
+);
+
+sdk.currentUser.profile().then(profile => {
+  console.log('Utilisateur connecté:', profile.display_name);
+});
+
 
 function constructCtxArray(originalArray) {
   const result = []
@@ -53,14 +65,14 @@ function ChatPrompt({ activeTab, setActiveTab }) {
 
   const onSendPrompt = async () => {
     const prompt = promptRef.current.value
-    console.log('onSendPrompt', prompt)
+    console.log('onSendPrompt', prompt);
 
     addMessage({
       role: 'user',
       content: prompt,
       id: Math.random().toString(),
     })
-    
+
     const messages = $messages.get()
 
     const contextInputs = constructCtxArray(messages);
@@ -80,14 +92,45 @@ function ChatPrompt({ activeTab, setActiveTab }) {
 
     for (let i = 0, len = steps.length; i < len; i++) {
         const agent = steps[i]
+      const spotifyTracks = [];
+      const fullPrompt = "";
+
 
          let cloned = $messages.get()
 
+
+
+      console.log("cloned",cloned[cloned.length-2])
+
+          sdk.search(cloned[cloned.length-2].content, ['playlist'], { limit: 10 })
+              .then(async result => {
+                const playlists = result.playlists.items;
+                for (const playlist of playlists) {
+
+                  const fullPlaylist = await sdk.playlists.getPlaylist(playlist.id);
+
+                  console.log(playlist.id)
+
+
+                  console.log(`Playlist : ${playlist.name}`);
+                  fullPlaylist.tracks.items.forEach((track) => {
+                    spotifyTracks.push(`${track.track.name} (${track.track.artists.map(a => a.name).join(', ')})`);
+                    fullPrompt = `${prompt}\n\nVoici une base de tracks disponibles :\n${spotifyTracks.toString()}`;
+                  });
+                }
+              })
+              .catch(err => {
+                console.error('Erreur lors de la recherche', err);
+              });
+
+      console.log('spotifyTracks:', spotifyTracks);
+      console.log("fullPrompt", fullPrompt);
+
+
       // call agent
-      const stream = await onAgent({ prompt: prompt, agent, contextInputs })
+      const stream = await onAgent({ prompt: fullPrompt, agent, contextInputs })
       for await (const part of stream) {
         const token = part.choices[0]?.delta?.content || ''
-
         const last = cloned.at(-1)
         cloned[cloned.length - 1] = {
           ...last,
@@ -105,8 +148,6 @@ function ChatPrompt({ activeTab, setActiveTab }) {
         ...last,
         completed: true,
       }
-
-
 
       const NewJson = extractJSONString(last.content);
 
@@ -149,7 +190,7 @@ function ChatPrompt({ activeTab, setActiveTab }) {
 
   }
 
-  
+
 
   return (
     <Flex

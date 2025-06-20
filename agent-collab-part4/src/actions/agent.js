@@ -43,7 +43,8 @@ export const onDummyAgent = async function* () {
   console.log('onAgent prompt', prompt)
 
   agent.role = `${agent.role}
-                Respond in the same language of the user.
+                Respond in the same language as the user.
+                Be an expert assistant on electronic music.
                 Be to the point, and do not add any fluff.`
 
   if (agent.desired_response) {

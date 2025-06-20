@@ -14,7 +14,7 @@ function ChatList() {
       {messages.map((msg) => (
         <Flex key={`message-${msg.id}`}>
           {msg.role === 'assistant' ? (
-            <Flex
+            <Flex justify='end'
               style={{
                 background: 'var(--accent-5)',
                 padding: '4px 8px',
@@ -25,7 +25,7 @@ function ChatList() {
               <Markdown content={msg.content || ''} />
             </Flex>
           ) : (
-            <Flex
+            <Flex justify='end' gap={2}
               style={{
                 background: 'var(--accent-a3)',
                 padding: '4px 8px',

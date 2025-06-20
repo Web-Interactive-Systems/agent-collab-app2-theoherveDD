@@ -26,10 +26,7 @@ export const $agents = atom([
         '7. Tu ne dois **jamais** ajouter de texte explicatif, juste le bloc de code JSON.\n',
     response_format: 'markdown',
     temperature: 1,
-    desired_response: 'Bloc JSON propre contenant une chanson réelle à ajouter à une playlist\n' +
-        '```json\n' +
-            '{"id": \'song-x\', "title": \'title1\', "artist": \'\'}\n' +
-        '```\n'
+    desired_response: 'Bloc JSON propre contenant une chanson réelle à ajouter à une playlist'
   },
   {
     id: Math.random().toString(),
@@ -59,7 +56,7 @@ export const $agents = atom([
     response_format: 'markdown',
     temperature: 1,
     desired_response: 'Une phrase qui résume l’intention, suivie d’un unique bloc JSON contenant la playlist complète.'
-  }
+  },
 ])
 
 
