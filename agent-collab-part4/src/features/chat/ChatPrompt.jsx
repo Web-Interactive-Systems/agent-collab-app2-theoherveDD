@@ -1,6 +1,6 @@
 import { onAgent } from '@/actions/agent'
 import { styled } from '@/lib/stitches'
-import {$chatAgents, $messages, $playlists, addMessage, addTrackInPlaylist, updateMessages} from '@/store/store'
+import {$chatAgents, $messages, $playlists, addMessage, addTrackInPlaylist, updateMessages, createPlaylist} from '@/store/store'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { Button, Flex, TextArea } from '@radix-ui/themes'
 import { useRef, useState } from 'react'
@@ -38,7 +38,7 @@ function constructCtxArray(originalArray) {
   return result
 }
 
-function ChatPrompt() {
+function ChatPrompt({ activeTab, setActiveTab }) {
   const promptRef = useRef(null)
   const [isPromptEmpty, setIsPromptEmpty] = useState(true)
 
@@ -54,8 +54,6 @@ function ChatPrompt() {
   const onSendPrompt = async () => {
     const prompt = promptRef.current.value
     console.log('onSendPrompt', prompt)
-
-  
 
     addMessage({
       role: 'user',
@@ -76,6 +74,8 @@ function ChatPrompt() {
       completed: false, // not complete yet
     }
 
+    addMessage(response)
+
     const steps = isEmpty(chatAgents) ? [null] : chatAgents
 
     for (let i = 0, len = steps.length; i < len; i++) {
@@ -94,6 +94,8 @@ function ChatPrompt() {
           content: last.content + token,
         }
 
+        console.log(cloned)
+
         updateMessages([...cloned])
       }
 
@@ -106,18 +108,23 @@ function ChatPrompt() {
 
 
 
-      const BigJson = extractJSONString(last.content);
+      const NewJson = extractJSONString(last.content);
 
-      console.log('last', last.content)
+      // Gestion des différentes fonctions sur les playlists.
 
-      console.log("typeof last.content:", typeof last.content);
-      console.log("last.content:", last.content);
+      // Add one Track
 
-      console.log('BIG JSON', BigJson)
+      if (agent.title === "AddOneTrack") {
+        addTrackInPlaylist(NewJson, activeTab);
 
-      addTrackInPlaylist(BigJson);
+        console.log(activeTab)
+        console.log(NewJson)
+      }
 
-
+      // Create New Playlist
+      if (agent.title === "CreatePlaylist") {
+        createPlaylist(NewJson);
+      }
 
 
 

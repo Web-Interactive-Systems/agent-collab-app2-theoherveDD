@@ -1,15 +1,19 @@
 import { Resizable } from '@/components/Resizable'
 import Chat from '@/features/chat/Chat'
 import { Flex } from '@radix-ui/themes'
-import PlaylistList from '@/features/playlist/PlaylistList'
+import Playlist from '@/features/playlist/Playlist'
+import { useState } from 'react'
 
-function Home() {
+function HomePlaylist() {
+
+    const [activeTab, setActiveTab] = useState();
+
   return (
     <Flex
       gap='8'
       width='100%'
       height='100%'>
-        <PlaylistList />
+        <Playlist activeTab={activeTab} setActiveTab={setActiveTab}/>
 
       <Resizable
         defaultSize={{ width: 550 }}
@@ -30,10 +34,10 @@ function Home() {
           topLeft: false,
         }}>
                    
-        <Chat />
+        <Chat activeTab={activeTab} setActiveTab={setActiveTab}/>
       </Resizable>
     </Flex>
   )
 }
 
-export default Home
+export default HomePlaylist

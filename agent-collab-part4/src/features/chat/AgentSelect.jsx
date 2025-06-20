@@ -28,7 +28,7 @@ function SortableAgent({ agent, onRemove }) {
     transform: CSS.Transform.toString(transform),
     transition,
     padding: '0.5rem 1rem',
-    background: '#eee',
+    background: '#000',
     borderRadius: '28px',
     margin: '0.25rem',
     display: 'flex',

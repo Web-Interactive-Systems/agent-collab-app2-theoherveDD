@@ -2,7 +2,7 @@ import { Flex } from '@radix-ui/themes'
 import ChatList from './ChatList'
 import ChatPrompt from './ChatPrompt'
 
-function Chat() {
+function Chat({ activeTab, setActiveTab }) {
   return (
     <Flex
       direction='column'
@@ -11,7 +11,7 @@ function Chat() {
       height='100%'
       p='1'>
       <ChatList />
-      <ChatPrompt />
+      <ChatPrompt activeTab={activeTab} setActiveTab={setActiveTab}/>
     </Flex>
   )
 }
