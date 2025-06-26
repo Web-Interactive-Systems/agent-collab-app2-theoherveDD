@@ -20,10 +20,9 @@ export const $agents = atom([
         '\n' +
         'Format de sortie (obligatoire) :\n' +
         '```json\n' +
-        '{"id": \'song-x\', "title": \'title1\', "artist": \'\'}\n' +
+        '{"id": \'id-de-la-track\', "title": \'title1\', "artist": \'\'}\n' +
         '```\n' +
-        '6. Le champ "id" doit toujours être sous le format "song-X", avec X = 3 si aucun ID précédent n’est connu.\n' +
-        '7. Tu ne dois **jamais** ajouter de texte explicatif, juste le bloc de code JSON.\n',
+        '6. Tu ne dois **jamais** ajouter de texte explicatif, juste le bloc de code JSON.\n',
     response_format: 'markdown',
     temperature: 1,
     desired_response: 'Bloc JSON propre contenant une chanson réelle à ajouter à une playlist'

@@ -43,6 +43,7 @@ const PlaylistList = ({ activeTab, setActiveTab }) => {
                         <Table.Root style={{ width: "100%" }}>
                             <Table.Header>
                                 <Table.Row>
+                                    <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                                     <Table.ColumnHeaderCell>Titre</Table.ColumnHeaderCell>
                                     <Table.ColumnHeaderCell>Artiste</Table.ColumnHeaderCell>
                                 </Table.Row>
@@ -52,6 +53,7 @@ const PlaylistList = ({ activeTab, setActiveTab }) => {
 
                                 {play["songs"].map((song) => (
                                     <Table.Row>
+                                        <Table.Cell><Button>▶︎</Button></Table.Cell>
                                         <Table.RowHeaderCell>{song.title}</Table.RowHeaderCell>
                                         <Table.Cell>{song.artist}</Table.Cell>
                                     </Table.Row>

@@ -93,31 +93,97 @@ function ChatPrompt({ activeTab, setActiveTab }) {
     for (let i = 0, len = steps.length; i < len; i++) {
         const agent = steps[i]
       const spotifyTracks = [];
-      const fullPrompt = "";
 
 
          let cloned = $messages.get()
 
 
-
       console.log("cloned",cloned[cloned.length-2])
 
-          sdk.search(cloned[cloned.length-2].content, ['playlist'], { limit: 10 })
+          sdk.search(cloned[cloned.length-2].content, ['playlist'], { limit: 1 })
               .then(async result => {
-                const playlists = result.playlists.items;
+                const playlistsUnclean = result.playlists.items;
+
+                const playlistsNoSlice = playlistsUnclean.filter(item => item !== null);
+
+                const playlists = playlistsNoSlice.slice(playlistsNoSlice.length-2);
+
+                console.log("playlists", playlists);
                 for (const playlist of playlists) {
 
                   const fullPlaylist = await sdk.playlists.getPlaylist(playlist.id);
 
                   console.log(playlist.id)
 
-
-                  console.log(`Playlist : ${playlist.name}`);
                   fullPlaylist.tracks.items.forEach((track) => {
-                    spotifyTracks.push(`${track.track.name} (${track.track.artists.map(a => a.name).join(', ')})`);
-                    fullPrompt = `${prompt}\n\nVoici une base de tracks disponibles :\n${spotifyTracks.toString()}`;
+                    spotifyTracks.push(`id : ${track.track.id} ${track.track.name} (${track.track.artists.map(a => a.name).join(', ')})`);
+
+
                   });
                 }
+                console.log(spotifyTracks);
+
+                const SpotifyReduce = spotifyTracks.reduce((acc, track) => acc + ', ' + track);
+
+                const fullPrompt = `Le Thème est ${prompt || ''}, voici des exemples de sons dans ce genre ${SpotifyReduce || ''}`;
+                console.log(fullPrompt);
+
+                // call agent
+                const stream = await onAgent({ prompt: fullPrompt, agent, contextInputs })
+                for await (const part of stream) {
+                  const token = part.choices[0]?.delta?.content || ''
+                  const last = cloned.at(-1)
+                  cloned[cloned.length - 1] = {
+                    ...last,
+                    content: last.content + token,
+                  }
+
+                  console.log(cloned)
+
+                  updateMessages([...cloned])
+                }
+
+                const last = cloned.at(-1)
+
+                cloned[cloned.length - 1] = {
+                  ...last,
+                  completed: true,
+                }
+
+                const NewJson = extractJSONString(last.content);
+
+                // Gestion des différentes fonctions sur les playlists.
+
+                // Add one Track
+
+                if (agent.title === "AddOneTrack") {
+                  addTrackInPlaylist(NewJson, activeTab);
+
+                  console.log(activeTab)
+                  console.log(NewJson)
+                }
+
+                // Create New Playlist
+                if (agent.title === "CreatePlaylist") {
+                  createPlaylist(NewJson);
+                }
+
+
+
+                // add next prompt to chat
+                if (steps.length > 0 && i !== steps.length - 1) {
+                  cloned = [
+                    ...cloned,
+                    {
+                      role: 'assistant',
+                      content: '',
+                      id: Math.random().toString(),
+                      completed: false,
+                    },
+                  ]
+                }
+
+                updateMessages([...cloned])
               })
               .catch(err => {
                 console.error('Erreur lors de la recherche', err);
@@ -127,62 +193,7 @@ function ChatPrompt({ activeTab, setActiveTab }) {
       console.log("fullPrompt", fullPrompt);
 
 
-      // call agent
-      const stream = await onAgent({ prompt: fullPrompt, agent, contextInputs })
-      for await (const part of stream) {
-        const token = part.choices[0]?.delta?.content || ''
-        const last = cloned.at(-1)
-        cloned[cloned.length - 1] = {
-          ...last,
-          content: last.content + token,
-        }
 
-        console.log(cloned)
-
-        updateMessages([...cloned])
-      }
-
-      const last = cloned.at(-1)
-
-      cloned[cloned.length - 1] = {
-        ...last,
-        completed: true,
-      }
-
-      const NewJson = extractJSONString(last.content);
-
-      // Gestion des différentes fonctions sur les playlists.
-
-      // Add one Track
-
-      if (agent.title === "AddOneTrack") {
-        addTrackInPlaylist(NewJson, activeTab);
-
-        console.log(activeTab)
-        console.log(NewJson)
-      }
-
-      // Create New Playlist
-      if (agent.title === "CreatePlaylist") {
-        createPlaylist(NewJson);
-      }
-
-
-
-      // add next prompt to chat
-      if (steps.length > 0 && i !== steps.length - 1) {
-        cloned = [
-          ...cloned,
-          {
-            role: 'assistant',
-            content: '',
-            id: Math.random().toString(),
-            completed: false,
-          },
-        ]
-      }
-
-      updateMessages([...cloned])
     }
 
     promptRef.current.value = ''
