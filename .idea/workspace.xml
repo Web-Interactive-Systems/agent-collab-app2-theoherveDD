@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="59d3a2b5-4be4-4670-a9a3-bc47da204d19" name="Changes" comment="2 agents fonctionnels : &#10;&#10;- AddOneTrack : Qui me permet d'ajouter une track dans la playlist selectionné.&#10;- CreatePlaylist : Qui permet de créer une nouvelle playlist">
-      <change afterPath="$PROJECT_DIR$/agent-collab-part4/src/features/Player/Player.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/.env" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/features/chat/Chat.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/features/chat/Chat.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/features/chat/ChatPrompt.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/features/chat/ChatPrompt.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/features/playlist/Playlist.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/features/playlist/Playlist.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/features/playlist/PlaylistList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/features/playlist/PlaylistList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/pages/Playlist.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/pages/Playlist.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agent-collab-part4/src/store/playlists.js" beforeDir="false" afterPath="$PROJECT_DIR$/agent-collab-part4/src/store/playlists.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
