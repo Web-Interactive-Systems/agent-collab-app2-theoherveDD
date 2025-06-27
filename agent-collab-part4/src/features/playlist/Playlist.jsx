@@ -1,7 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import PlaylistList from './PlaylistList'
 
-function Chat({ activeTab, setActiveTab }) {
+function Chat({ currentSong, setCurrentSong,  activeTab, setActiveTab }) {
     return (
         <Flex
             direction='row'
@@ -9,7 +9,7 @@ function Chat({ activeTab, setActiveTab }) {
             width='100%'
             height='100%'
             p='1'>
-            <PlaylistList activeTab={activeTab} setActiveTab={setActiveTab} />
+            <PlaylistList currentSong={currentSong} setCurrentSong={setCurrentSong} activeTab={activeTab} setActiveTab={setActiveTab} />
         </Flex>
     )
 }

@@ -31,15 +31,8 @@ const PromptArea = styled(TextArea, {
   },
 })
 
-const sdk = SpotifyApi.withUserAuthorization(
-    import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-    import.meta.env.VITE_SPOTIFY_REDIRECT_URI,
-    ['user-read-private', 'playlist-read'],
-);
 
-sdk.currentUser.profile().then(profile => {
-  console.log('Utilisateur connecté:', profile.display_name);
-});
+
 
 
 function constructCtxArray(originalArray) {
@@ -50,7 +43,7 @@ function constructCtxArray(originalArray) {
   return result
 }
 
-function ChatPrompt({ activeTab, setActiveTab }) {
+function ChatPrompt({ sdk, activeTab, setActiveTab }) {
   const promptRef = useRef(null)
   const [isPromptEmpty, setIsPromptEmpty] = useState(true)
 
@@ -94,11 +87,10 @@ function ChatPrompt({ activeTab, setActiveTab }) {
         const agent = steps[i]
       const spotifyTracks = [];
 
-
          let cloned = $messages.get()
 
+        console.log("cloned",cloned[cloned.length-2])
 
-      console.log("cloned",cloned[cloned.length-2])
 
           sdk.search(cloned[cloned.length-2].content, ['playlist'], { limit: 1 })
               .then(async result => {
@@ -125,7 +117,7 @@ function ChatPrompt({ activeTab, setActiveTab }) {
 
                 const SpotifyReduce = spotifyTracks.reduce((acc, track) => acc + ', ' + track);
 
-                const fullPrompt = `Le Thème est ${prompt || ''}, voici des exemples de sons dans ce genre ${SpotifyReduce || ''}`;
+                const fullPrompt = `The theme is "${prompt || ''}". Below are example tracks in this genre, each formatted as: ", id : <Spotify ID> <Track Title> (<Artist>)", and separated by commas. Make sure to extract the correct Spotify ID that matches the track title and artist that follow it. Do not confuse IDs between tracks — each ID corresponds only to the track that immediately follows it. If the provided tracks seem irrelevant, and an artist is mentioned, prioritize tracks that best represent that artist. => ${SpotifyReduce || ''}`;
                 console.log(fullPrompt);
 
                 // call agent
@@ -214,7 +206,7 @@ function ChatPrompt({ activeTab, setActiveTab }) {
         <PromptArea
           ref={promptRef}
           id='Todo'
-          placeholder='Comment puis-je aider...'
+          placeholder='Donne un mood, une émotion, autres ...'
           onChange={onTextChange}
           onKeyDown={(e) => {
             const canSend = !isPromptEmpty && e.key === 'Enter'

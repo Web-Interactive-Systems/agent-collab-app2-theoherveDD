@@ -8,8 +8,7 @@ export const $playlists = atom([
     name: "My Playlist",
     description: "A collection of my favorite songs",
     songs: [
-      { id: "song-1", title: "Flowers", artist: "Miley Cyrus" },
-      { id: "song-2", title: "As It Was", artist: "Harry Styles" }
+      { id: "6jEhAHgC5sXIxl2DH3fkKe", title: "J'ai mangé un kiwi et maintenant il est parti", artist: "David fils de Momone, Nerod" },
     ]
   },
   {

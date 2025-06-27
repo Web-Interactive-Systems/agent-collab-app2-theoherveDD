@@ -1,6 +1,7 @@
 import EmojiPicker from '@/components/EmojiPicker'
 import { $playlists } from '@/store/store'
 import { useStore } from '@nanostores/react'
+import { useState } from "react";
 import { CheckIcon } from '@radix-ui/react-icons'
 import {
     Button,
@@ -21,7 +22,7 @@ import {
 import playlist from "@/pages/Playlist.jsx";
 
 
-const PlaylistList = ({ activeTab, setActiveTab }) => {
+const PlaylistList = ({ currentSong, setCurrentSong, activeTab, setActiveTab }) => {
     const playlist = useStore($playlists);
 
     const SongFromFirstPlaylist = playlist[0]["songs"];
@@ -53,7 +54,11 @@ const PlaylistList = ({ activeTab, setActiveTab }) => {
 
                                 {play["songs"].map((song) => (
                                     <Table.Row>
-                                        <Table.Cell><Button>▶︎</Button></Table.Cell>
+                                        <Table.Cell>
+                                            <Button onClick={() => setCurrentSong(song)}
+                                                    variant={currentSong?.id === song.id ? "solid" : "ghost"}
+                                            >Select Song</Button>
+                                        </Table.Cell>
                                         <Table.RowHeaderCell>{song.title}</Table.RowHeaderCell>
                                         <Table.Cell>{song.artist}</Table.Cell>
                                     </Table.Row>
